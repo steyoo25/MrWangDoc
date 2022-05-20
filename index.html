@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .piece{
+            position: absolute;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+        }
+        img{
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="playArea"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io();
+        let pieces = [];
+        const sizes = [150, 221, 209, 316, 217, 138, 233, 234, 318, 183, 145, 216, 290, 257, 181, 151, 213, 279, 270, 194];
+
+        function placePieces(positions){
+            let thisPiece;
+            let playArea = document.querySelector('#playArea');
+            for (let i = 0; i < 20; i ++){
+                thisPiece = document.createElementById('playArea');
+                thisPiece.src = 'http://v-escape.com/img/demo/piece' + (i+1) + '.png';
+                thisPiece.style.left = positions[i][0] + 'px';
+                thisPiece.style.top = positions[i][1] + 'px';
+                thisPiece.style.width = sizes[i] + 'px';
+                thisPiece.style.height = 'auto';
+                thisPiece.classList.add('piece');
+                thisPiece.pieceNum = i;
+                pieces.push(thisPiece);
+                playArea.appendChild(thisPiece);
+            }
+        }
+
+        socket.on('placePieces', placePieces);
+    </script>
+</body>
+</html>
